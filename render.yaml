@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: pdf-service
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: PDF_SERVICE_SECRET
+        generateValue: true
+      - key: PDF_INTERNAL_SECRET
+        sync: false
+      - key: PDF_SERVICE_BASE_URL
+        sync: false
+      - key: TOKEN_TTL_SECONDS
+        value: "3600"

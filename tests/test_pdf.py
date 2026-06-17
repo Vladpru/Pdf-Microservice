@@ -1,6 +1,17 @@
 import pytest
 from datetime import datetime, timezone
-from app.services.pdf import render_pdf
+
+try:
+    from weasyprint import HTML  # noqa: F401
+    _weasyprint_available = True
+except (ImportError, OSError):
+    _weasyprint_available = False
+
+skip_no_weasyprint = pytest.mark.skipif(
+    not _weasyprint_available,
+    reason="WeasyPrint system libraries (pango/gobject) not available in this environment",
+)
+
 from app.schemas.payload import EntityPayload, Author
 
 
@@ -25,14 +36,18 @@ def _make_payload(entity_type="idea"):
     )
 
 
+@skip_no_weasyprint
 def test_render_idea_returns_bytes(set_env):
+    from app.services.pdf import render_pdf
     result = render_pdf(_make_payload("idea"))
     assert isinstance(result, bytes)
     assert len(result) > 1000
     assert result[:4] == b"%PDF"
 
 
+@skip_no_weasyprint
 def test_render_problem_returns_bytes(set_env):
+    from app.services.pdf import render_pdf
     result = render_pdf(_make_payload("problem"))
     assert isinstance(result, bytes)
     assert result[:4] == b"%PDF"
