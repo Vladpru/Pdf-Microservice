@@ -7,34 +7,58 @@
 </head>
 <body>
 
+<div class="brand-header">
+  <img class="brand-logo" src="{{ assets_url }}/logo.svg" alt="Polycoders logo">
+  <span class="brand-name">Polycoders</span>
+</div>
+
 {% if cover_image_url %}
   <img class="cover-image" src="{{ cover_image_url }}" alt="Cover image">
 {% endif %}
 
 <h1>{{ title }}</h1>
 
-<div class="meta">
-  <span class="badge">{{ status }}</span>
-  {% if stage %}<span class="badge">{{ stage }}</span>{% endif %}
-</div>
-
-<div class="author">
-  <div class="author-name">{{ author.name }}</div>
+<div class="meta-grid">
+  <div class="meta-row">
+    <span class="meta-label">Status</span>
+    <span class="badge">{{ status }}</span>
+  </div>
+  {% if stage %}
+  <div class="meta-row">
+    <span class="meta-label">Stage</span>
+    <span class="badge">{{ stage }}</span>
+  </div>
+  {% endif %}
+  <div class="meta-row">
+    <span class="meta-label">Author</span>
+    <span class="meta-value">{{ author.name }}</span>
+  </div>
+  {% if contributors %}
+  <div class="meta-row">
+    <span class="meta-label">Contributors</span>
+    <span class="meta-value">{% for c in contributors %}{{ c.name }}{% if not loop.last %}, {% endif %}{% endfor %}</span>
+  </div>
+  {% endif %}
+  {% if published_at %}
+  <div class="meta-row">
+    <span class="meta-label">Published</span>
+    <span class="meta-value">{{ published_at.strftime("%b %d, %Y") }}</span>
+  </div>
+  {% endif %}
 </div>
 
 <div class="stats">
   <div class="stat"><span>{{ like_count }}</span> likes</div>
   <div class="stat"><span>{{ view_count }}</span> views</div>
   <div class="stat"><span>{{ comment_count }}</span> comments</div>
-  {% if published_at %}<div class="stat">Published <span>{{ published_at.strftime("%b %d, %Y") }}</span></div>{% endif %}
 </div>
 
 <h2>Description</h2>
-<div class="description">{{ description }}</div>
+<div class="description">{{ description | safe }}</div>
 
 {% if ai_summary %}
 <h2>AI Summary</h2>
-<div class="ai-summary">{{ ai_summary }}</div>
+<div class="ai-summary">{{ ai_summary | safe }}</div>
 {% endif %}
 
 {% if linked_entities %}
@@ -49,12 +73,12 @@
 {% for comment in comments %}
   <div class="comment">
     <div class="comment-author">{{ comment.author }} <span class="comment-date">· {{ comment.created_at.strftime("%b %d, %Y") }}</span></div>
-    <div class="comment-body">{{ comment.body }}</div>
+    <div class="comment-body">{{ comment.body | safe }}</div>
   </div>
 {% endfor %}
 {% endif %}
 
-<div class="footer">Exported from Idea Platform · {{ export_date }}</div>
+<div class="footer">Exported from Polycoders · {{ export_date }}</div>
 
 </body>
 </html>

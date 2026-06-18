@@ -33,7 +33,7 @@ def generate(
     file_path = _tmp_dir / f"{file_id}.pdf"
     file_path.write_bytes(pdf_bytes)
 
-    token = sign_token(file_id)
+    token = sign_token(file_id, title=payload.title)
     expires_at = datetime.now(timezone.utc) + timedelta(seconds=settings.token_ttl_seconds)
 
     download_url = f"{settings.pdf_service_base_url}/pdf/{token}"

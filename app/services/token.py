@@ -15,15 +15,18 @@ class TokenInvalidError(Exception):
     pass
 
 
-def sign_token(file_id: str) -> str:
+def sign_token(file_id: str, title: str | None = None) -> str:
     expire = datetime.now(timezone.utc) + timedelta(seconds=_ttl)
-    return jwt.encode({"file_id": file_id, "exp": expire}, _secret, algorithm=_algorithm)
+    claims: dict = {"file_id": file_id, "exp": expire}
+    if title:
+        claims["title"] = title
+    return jwt.encode(claims, _secret, algorithm=_algorithm)
 
 
-def verify_token(token: str) -> str:
+def verify_token(token: str) -> tuple[str, str | None]:
     try:
         payload = jwt.decode(token, _secret, algorithms=[_algorithm])
-        return payload["file_id"]
+        return payload["file_id"], payload.get("title")
     except ExpiredSignatureError:
         raise TokenExpiredError("Token has expired")
     except JWTError:

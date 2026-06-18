@@ -27,6 +27,7 @@ class EntityPayload(BaseModel):
     description: str
     ai_summary: Optional[str] = None
     author: Author
+    contributors: list[Author] = []
     status: str
     stage: Optional[str] = None
     tags: list[str] = []
