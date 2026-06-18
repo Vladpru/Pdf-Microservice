@@ -1,5 +1,4 @@
 import uuid
-import os
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
@@ -37,7 +36,6 @@ def generate(
     token = sign_token(file_id)
     expires_at = datetime.now(timezone.utc) + timedelta(seconds=settings.token_ttl_seconds)
 
-    base_url = os.getenv("PDF_SERVICE_BASE_URL", "http://localhost:8000")
-    download_url = f"{base_url}/pdf/{token}"
+    download_url = f"{settings.pdf_service_base_url}/pdf/{token}"
 
     return GenerateResponse(download_url=download_url, expires_at=expires_at)
