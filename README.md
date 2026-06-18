@@ -56,9 +56,10 @@ Generates a PDF and returns a signed download URL.
   "entity_type": "idea",
   "entity_id": "abc-123",
   "title": "My Idea",
-  "description": "Full description...",
+  "description": "Markdown **supported**.",
   "ai_summary": null,
   "author": { "name": "Alice", "avatar_url": null },
+  "contributors": [{ "name": "Bob", "avatar_url": null }],
   "status": "PUBLISHED",
   "stage": "PROTOTYPING",
   "tags": ["tag1"],
@@ -71,6 +72,10 @@ Generates a PDF and returns a signed download URL.
   "cover_image_url": null
 }
 ```
+
+`description`, `ai_summary`, and comment bodies are rendered as Markdown (headings, bold, lists, etc.).  
+`contributors` is optional — omit or pass `[]` if there are none.  
+The downloaded file is named after the entity title (e.g. `My-Idea.pdf`).
 
 **Response:**
 ```json
